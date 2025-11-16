@@ -1,0 +1,94 @@
+.page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  color: #000000;
+  display: flex;
+  flex-direction: row;
+  padding: 40px;
+  font-family: 'Inter', sans-serif;
+  gap: 60px;
+}
+
+.left-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  /* text-align: center; */
+}
+
+.club-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.club-logo {
+  width: 100px;
+  height: auto;
+  border-radius: 8px;
+  /* text-align: center; */
+}
+
+.club-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  /* text-align: center; */
+}
+
+.venue-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.venue-image {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* Style pour KPIs, graphiques, etc. */
+}
+.right-column > h2{
+    text-align: center;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+.right-column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 400px; /* ou auto selon le cas */
+}
+.stats-chart {
+  width: 100%;
+  height: 300px; /* fixe */
+  min-width: 0;
+  min-height: 0;
+}
+.club-logo {
+  display: block;
+  margin: 0 auto; /* centre horizontalement */
+  width: 120px;   /* ajuste la taille */
+  height: auto;
+}
