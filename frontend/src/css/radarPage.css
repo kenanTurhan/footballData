@@ -1,0 +1,16 @@
+.results {
+    height: 350px;            /* Hauteur fixe = environ 5 cartes visibles */
+    overflow-y: auto;         /* Scroll interne */
+    display: flex;
+    flex-direction: column;   /* 1 carte par ligne */
+    gap: 15px;
+    border: 1px solid #ddd;   /* Pour bien voir la zone */
+    padding: 10px;
+    background: #f7f7f7;
+}
+
+
+/* Si tu veux 5 cartes visibles max par colonne */
+.player-card {
+    width: 180px;
+}
