@@ -1,27 +1,55 @@
+version: "3.8"
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "5173:5173"   # port exposé au host
-    stdin_open: true
-    tty: true
-
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - "5001:5000"
-    depends_on:
-      - db
-
-  db:
-    image: postgres:15
+    container_name: myapp-backend
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
+      - NODE_ENV=production
+      # - DATABASE_URL=...  # mets ici tes variables d'environnement réelles ou via .env
     ports:
-      - "5432:5432"
+      - "3000:3000"   # adapte si ton backend écoute autre port
+    depends_on:
+      - db  # si tu as une DB, sinon retire
+    networks:
+      - mynet
+    env_file:
+      - ./backend/.env
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: myapp-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      VITE_API_URL: http://backend:3000  # <- ajoute ça
+
+    networks:
+      - mynet
+
+  # Exemple de service DB (optionnel)
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypass
+      POSTGRES_DB: mydb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - mynet
+    ports:
+    - "5432:5432"   # <-- ajoute ceci
+
+
+volumes:
+  db-data:
+
+networks:
+  mynet:
+    driver: bridge

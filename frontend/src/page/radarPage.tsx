@@ -4,24 +4,23 @@ import { useSearchPlayer } from "../hooks/useJoueurSearch";
 import { RadarChart, Radar, PolarAngleAxis, PolarRadiusAxis, Legend, PolarGrid, ResponsiveContainer } from "recharts";
 import { usePlayerProfile } from "../hooks/useJoueurPage";
 
-import "../css/radarPage.css";
+import "../css/radarPage.css"; // Assurez-vous que ce fichier est présent
 
 export default function CompareRadarPage() {
   const [query, setQuery] = useState("");
   
   // 1. DÉCLARATION DES ÉTATS POUR LES DEUX JOUEURS
-  const [selectedPlayerId1, setSelectedPlayerId1] = useState<number | null>(null); // Ancien selectedPlayerId
-  const [selectedPlayerId2, setSelectedPlayerId2] = useState<number | null>(null); // Nouveau pour la comparaison
+  const [selectedPlayerId1, setSelectedPlayerId1] = useState<number | null>(null);
+  const [selectedPlayerId2, setSelectedPlayerId2] = useState<number | null>(null);
   
   // 2. NOUVEL ÉTAT POUR GÉRER L'EMPLACEMENT DE SÉLECTION (1 ou 2)
   const [selectingPlayerSlot, setSelectingPlayerSlot] = useState<1 | 2>(1); 
 
   // CORRECTION: Renommer la variable retournée par useSearchPlayer
   const { players, loading: searchLoading, search } = useSearchPlayer();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Non utilisé dans le code actuel, mais conservé
 
   // 3. CHARGEMENT DES PROFILS DES DEUX JOUEURS
-  // Utilisation des IDs corrigés (selectedPlayerId1/2)
   const { player: player1, loading: profileLoading1 } = usePlayerProfile(selectedPlayerId1 || 0);
   const { player: player2, loading: profileLoading2 } = usePlayerProfile(selectedPlayerId2 || 0);
 
@@ -38,9 +37,13 @@ export default function CompareRadarPage() {
 
   // 4. PRÉPARATION DES DONNÉES DE COMPARAISON (useMemo)
   const { radarData, domainMax, playerName1, playerName2 } = useMemo(() => {
-    const defaultReturn = { radarData: [], domainMax: 100, playerName1: "Pas encore selectionner", playerName2: "Pas encore selectionner" };
+    const defaultReturn = { 
+        radarData: [], 
+        domainMax: 100, 
+        playerName1: "Joueur 1 (à sélectionner)", 
+        playerName2: "Joueur 2 (à sélectionner)" 
+    };
 
-    // Fonction utilitaire pour extraire les stats
     const getStats = (player: any) => {
         if (!player || !player.statistics || player.statistics.length === 0) {
             return null;
@@ -51,6 +54,7 @@ export default function CompareRadarPage() {
     const stats1 = getStats(player1);
     const stats2 = getStats(player2);
 
+    // Si aucun joueur n'a de stats, retour par défaut
     if (!stats1 && !stats2) {
         return defaultReturn;
     }
@@ -84,134 +88,176 @@ export default function CompareRadarPage() {
         subject,
         A: values1[index], // Joueur 1
         B: values2[index], // Joueur 2
-        fullMark: 100 // Garder une base, mais le domaine Max est ajusté
+        fullMark: 100 
     }));
 
 
-    // Calcul du domaine max en prenant en compte les valeurs A et B
+    // Calcul du domaine max
     const maxA = Math.max(...values1);
     const maxB = Math.max(...values2);
-    const overallMax = Math.max(maxA, maxB) * 1.2; // 20% de marge
+    const overallMax = Math.max(maxA, maxB) * 1.2; 
     
-    // Assurer un max de domaine lisible (multiple de 10) et au moins 100
     const maxDomain = Math.max(100, Math.ceil(overallMax / 10) * 10); 
     
     return { 
         radarData: finalData, 
         domainMax: maxDomain, 
-        playerName1: player1?.player.name || "Joueur 1",
-        playerName2: player2?.player.name || "Joueur 2",
+        playerName1: player1?.player.name || "Joueur 1 (Non sélectionné)",
+        playerName2: player2?.player.name || "Joueur 2 (Non sélectionné)",
     };
-  }, [player1, player2]); // Dépend des deux objets joueurs
+  }, [player1, player2]); 
 
   // 5. FONCTION DE SÉLECTION MISE À JOUR
   const handlePlayerSelect = (id: number) => {
-    // Si on sélectionne le Slot 1
+    // Si le joueur est déjà dans un slot, on ne fait rien
+    if (id === selectedPlayerId1 || id === selectedPlayerId2) return;
+    
     if (selectingPlayerSlot === 1) {
       setSelectedPlayerId1(id);
-      // On passe au Slot 2 pour la prochaine sélection
-      setSelectingPlayerSlot(2); 
+      // Passe au slot 2 si celui-ci est vide, sinon on reste sur 1
+      setSelectingPlayerSlot(selectedPlayerId2 === null ? 2 : 1); 
     } else {
-      // Si on sélectionne le Slot 2
       setSelectedPlayerId2(id);
-      // On peut repasser au Slot 1, ou rester sur 2. Ici on revient à 1.
-      setSelectingPlayerSlot(1); 
+      // Passe au slot 1 si celui-ci est vide, sinon on reste sur 2
+      setSelectingPlayerSlot(selectedPlayerId1 === null ? 1 : 2); 
     }
-    // Réinitialiser la recherche pour une nouvelle recherche
-    setQuery("");
+    setQuery(""); // Réinitialiser la recherche
   };
 
-   const handlePlayerRemove = (slot: number) => {
+   const handlePlayerRemove = (slot: 1 | 2) => {
     if (slot === 1) {
       setSelectedPlayerId1(null);
-      playerName1("Pas encore selectionner");
+      setSelectingPlayerSlot(1); // On redirige la prochaine sélection vers le slot 1
     } else {
       setSelectedPlayerId2(null);
-      playerName2(null);
+      setSelectingPlayerSlot(2); // On redirige la prochaine sélection vers le slot 2
     }
   };
 
   return (
-    <div className="page-joueur">
-      <h1>Comparaison radar</h1>
+    <div className="compare-radar-page">
+      <h1 className="page-title">Comparaison de Joueurs (Radar)</h1>
       
-      {/* 6. INDICATEUR DE SÉLECTION DANS LA BARRE DE RECHERCHE */}
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder={`Rechercher le Joueur ${selectingPlayerSlot}...`}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <div className="selection-status">
-            Sélectionnez actuellement le **Joueur {selectingPlayerSlot}**
+      {/* SECTION HAUTE : SÉLECTION DES JOUEURS */}
+      <div className="selection-header">
+        
+        {/* Barre de Recherche */}
+        <div className="search-group">
+          <input
+            type="text"
+            className="search-input"
+            placeholder={`Rechercher le Joueur ${selectingPlayerSlot}...`}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <span className={`selection-indicator-global slot-${selectingPlayerSlot}`}>
+              Sélectionnez le **Joueur {selectingPlayerSlot}**
+          </span>
+        </div>
+
+        {/* STATUT DES JOUEURS SÉLECTIONNÉS */}
+        <div className="selected-players-status">
+            
+          {/* Joueur 1 */}
+          <div className={`player-slot slot-1 ${selectedPlayerId1 ? 'selected' : 'empty'}`}>
+              <h3 className="slot-title">Joueur 1</h3>
+              <p className="player-name">{playerName1}</p>
+              {selectedPlayerId1 && (
+                  <button className="remove-btn" onClick={() => handlePlayerRemove(1)}>
+                      Supprimer
+                  </button>
+              )}
+          </div>
+
+          {/* Séparateur */}
+          <div className="status-separator">VS</div>
+            
+          {/* Joueur 2 */}
+          <div className={`player-slot slot-2 ${selectedPlayerId2 ? 'selected' : 'empty'}`}>
+              <h3 className="slot-title">Joueur 2</h3>
+              <p className="player-name">{playerName2}</p>
+              {selectedPlayerId2 && (
+                  <button className="remove-btn" onClick={() => handlePlayerRemove(2)}>
+                      Supprimer
+                  </button>
+              )}
+          </div>
         </div>
       </div>
-      <div>
-        <p>Joueur1 : {playerName1}</p>           <button onClick={() => handlePlayerRemove(1)}>{"supprimer"}</button>
 
+      {/* SECTION DES RÉSULTATS DE RECHERCHE */}
+      <div className="results-container">
+        {searchLoading && query.length > 0 && <p className="loading-message">Recherche en cours…</p>}
+        
+        {players.length > 0 && (
+            <div className="player-cards-list">
+              {players.map((p, i) => {
+                const playerStats = p.statistics?.[0];
 
+                const isSelected1 = selectedPlayerId1 === p.player.id;
+                const isSelected2 = selectedPlayerId2 === p.player.id;
+                
+                // Détermine la classe du slot occupé
+                let selectedSlotClass = '';
+                if (isSelected1 && isSelected2) {
+                    selectedSlotClass = 'selected-both'; // Improbable, mais géré
+                } else if (isSelected1) {
+                    selectedSlotClass = 'selected-1';
+                } else if (isSelected2) {
+                    selectedSlotClass = 'selected-2';
+                }
 
-        <p>Joueur2 : {playerName2}</p>           <button onClick={() => handlePlayerRemove(2)}>{"supprimer"}</button>
+                const cardClass = `player-card ${selectedSlotClass}`;
 
-      </div>
-
-      {/* Affichage des Résultats de la Recherche */}
-      {searchLoading && <p>Recherche en cours…</p>}
-      
-      <div className="results">
-        {players.map((p, i) => {
-          const playerStats = p.statistics?.[0]; // p.statistics est l'ARRAY
-
-          const isSelected1 = selectedPlayerId1 === p.player.id;
-          const isSelected2 = selectedPlayerId2 === p.player.id;
-          
-          // Classe CSS pour indiquer quel slot est occupé (voir CSS à la fin)
-          const cardClass = `player-card ${isSelected1 ? 'selected-1' : ''} ${isSelected2 ? 'selected-2' : ''}`;
-
-          return (
-            <div
-              key={p.player.id || i}
-              className={cardClass}
-              onClick={() => handlePlayerSelect(p.player.id)} // CLIC : SÉLECTIONNE le joueur
-            >
-              <img src={p.player.photo} alt={p.player.name} />
-              <h3>{p.player.name || "Nom inconnu"}</h3>
-              {/* {isSelected1 && <span className="selection-indicator player-1">J1</span>}
-              {isSelected2 && <span className="selection-indicator player-2">J2</span>} */}
-              <p>**{playerStats?.team?.name || "Club inconnu"}**</p>
-              <p>Poste : {p.statistics?.[0]?.games.position || "N/A"}</p>
+                return (
+                  <div
+                    key={p.player.id || i}
+                    className={cardClass}
+                    onClick={() => handlePlayerSelect(p.player.id)}
+                  >
+                    <div className="player-img-container">
+                        <img src={p.player.photo} alt={p.player.name} className="player-photo" />
+                        {isSelected1 && <span className="selection-badge badge-1">J1</span>}
+                        {isSelected2 && <span className="selection-badge badge-2">J2</span>}
+                    </div>
+                    <div className="player-info">
+                        <h3 className="player-name-card">{p.player.name || "Nom inconnu"}</h3>
+                        <p className="player-club">**{playerStats?.team?.name || "Club inconnu"}**</p>
+                        <p className="player-position">Poste : {p.statistics?.[0]?.games.position || "N/A"}</p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
+        )}
       </div>
 
-      {/* Affichage du Radar Chart de Comparaison */}
+      {/* SECTION DU RADAR CHART DE COMPARAISON */}
       <div className="radar-section">
-        <h2>
+        <h2 className="radar-title">
             {selectedPlayerId1 || selectedPlayerId2 
               ? `Comparaison : ${playerName1} vs ${playerName2}` 
               : "Veuillez sélectionner deux joueurs pour comparer leurs statistiques"}
         </h2>
         
-        {(profileLoading1 || profileLoading2) && (selectedPlayerId1 || selectedPlayerId2) && <p>Chargement des statistiques...</p>}
+        {(profileLoading1 || profileLoading2) && (selectedPlayerId1 || selectedPlayerId2) && <p className="loading-message">Chargement des statistiques...</p>}
         
-        {(selectedPlayerId1 || selectedPlayerId2) && radarData.length > 0 && !(profileLoading1 || profileLoading2) && (
-          <div className="chart-container" style={{ maxWidth: 600, margin: '20px auto' }}>
-            <ResponsiveContainer width="100%" height={400}>
-              <RadarChart data={radarData}>
+        {!(selectedPlayerId1 === null && selectedPlayerId2 === null) && radarData.length > 0 && !(profileLoading1 || profileLoading2) && (
+          <div className="chart-wrapper">
+            <ResponsiveContainer width="100%" height={500}>
+              <RadarChart data={radarData} outerRadius="80%">
                 <PolarGrid stroke="#e0e0e0" />
-                <PolarAngleAxis dataKey="subject" stroke="#333" fontSize={12} />
-                <PolarRadiusAxis angle={30} domain={[0, domainMax]} tickCount={6} stroke="#aaa" /> 
+                <PolarAngleAxis dataKey="subject" stroke="#555" fontSize={14} />
+                <PolarRadiusAxis angle={30} domain={[0, domainMax]} tickCount={6} stroke="#aaa" fontSize={12} /> 
                 
                 {/* RADAR DU JOUEUR 1 */}
                 {selectedPlayerId1 && (
                     <Radar
                         name={playerName1}
-                        dataKey="A" // Clé 'A' pour le joueur 1
-                        stroke="#8884d8" 
-                        fill="#8884d8"
-                        fillOpacity={0.7}
+                        dataKey="A" 
+                        stroke="#007bff" // Bleu plus vif
+                        fill="#007bff"
+                        fillOpacity={0.6}
                         isAnimationActive={true}
                     />
                 )}
@@ -220,20 +266,21 @@ export default function CompareRadarPage() {
                 {selectedPlayerId2 && (
                     <Radar
                         name={playerName2}
-                        dataKey="B" // Clé 'B' pour le joueur 2
-                        stroke="#82ca9d" // Couleur différente
-                        fill="#82ca9d"
-                        fillOpacity={0.7}
+                        dataKey="B" 
+                        stroke="#dc3545" // Rouge vif
+                        fill="#dc3545"
+                        fillOpacity={0.6}
                         isAnimationActive={true}
                     />
                 )}
                 
-                <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                <Legend wrapperStyle={{ paddingTop: '20px', fontSize: 14 }} />
               </RadarChart>
             </ResponsiveContainer>
           </div>
         )}
-        {(selectedPlayerId1 || selectedPlayerId2) && radarData.length === 0 && !(profileLoading1 || profileLoading2) && <p>Statistiques détaillées non disponibles pour les joueurs sélectionnés.</p>}
+        {/* Message si les données ne sont pas trouvées */}
+        {!(selectedPlayerId1 === null && selectedPlayerId2 === null) && radarData.length === 0 && !(profileLoading1 || profileLoading2) && <p className="error-message">Statistiques détaillées non disponibles pour les joueurs sélectionnés ou données insuffisantes.</p>}
       </div>
     </div>
   );

@@ -1,0 +1,298 @@
+/* --- CONFIGURATION & VARIABLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  --ts-bg: #ffffff;          /* Noir très profond */
+  --ts-card-bg: #ffffff;     /* Gris noir */
+  --ts-accent: #000000;      /* Blanc pur */
+  --ts-text-muted: #666666;  /* Gris moyen pour textes secondaires */
+  --ts-border: #333333;      /* Gris foncé pour bordures subtiles */
+  --ts-radius: 4px;          /* Angles peu arrondis pour look tech/sport */
+  
+  --font-main: 'Inter', sans-serif;
+  --font-tech: 'JetBrains Mono', monospace;
+}
+
+/* --- LAYOUT GLOBAL --- */
+.ts-wrapper {
+  min-height: 100vh;
+  background-color: var(--ts-bg);
+  color: var(--ts-accent);
+  font-family: var(--font-main);
+  position: relative;
+  overflow-x: hidden;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Grille décorative en arrière-plan */
+.ts-background-grid {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: linear-gradient(var(--ts-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ts-border) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* --- HEADER --- */
+.ts-header {
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+}
+
+.ts-subtitle {
+  font-family: var(--font-tech);
+  font-size: 0.85rem;
+  letter-spacing: 0.2rem;
+  color: var(--ts-text-muted);
+  margin-bottom: 10px;
+  font-weight: 400;
+}
+
+.ts-title {
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin: 0;
+  background: linear-gradient(180deg, #000000 0%, #aaa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ts-divider {
+  width: 60px;
+  height: 4px;
+  background: var(--ts-accent);
+  margin: 20px auto 0;
+}
+
+/* --- CONTROLS / SELECTEUR --- */
+.ts-controls {
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 50px;
+}
+
+.ts-select-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ts-label {
+  font-family: var(--font-tech);
+  font-size: 0.75rem;
+  color: var(--ts-text-muted);
+  text-transform: uppercase;
+}
+
+.ts-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.ts-select {
+  width: 100%;
+  padding: 18px 20px;
+  background-color: transparent;
+  border: 1px solid var(--ts-border);
+  color: var(--ts-accent);
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: var(--font-main);
+  appearance: none;
+  cursor: pointer;
+  border-radius: var(--ts-radius);
+  transition: all 0.3s ease;
+}
+
+.ts-select:hover, .ts-select:focus {
+  border-color: var(--ts-accent);
+  background-color: rgba(255,255,255,0.02);
+  outline: none;
+  box-shadow: 0 0 20px rgba(255,255,255,0.05);
+}
+
+.ts-select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--ts-accent);
+  border-bottom: 2px solid var(--ts-accent);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+/* --- MAIN CONTENT & GRID --- */
+.ts-content {
+  z-index: 1;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.ts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* --- CARTE CLUB --- */
+.ts-card {
+  background-color: var(--ts-card-bg);
+  border: 1px solid var(--ts-border);
+  border-radius: var(--ts-radius);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  /* Aspect ratio trick pour uniformiser */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Interaction Hover : Inversion N&B */
+.ts-card:hover {
+  background-color: var(--ts-accent);
+  border-color: var(--ts-accent);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+}
+
+.ts-card-inner {
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.ts-logo-box {
+  width: 90px;
+  height: 90px;
+  padding: 10px;
+  margin-bottom: 20px;
+  background: white; /* Fond blanc pour garantir la visibilité des logos */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Ombre interne légère */
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1); 
+  transition: transform 0.3s ease;
+}
+
+.ts-card:hover .ts-logo-box {
+  transform: scale(1.1);
+}
+
+.ts-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.ts-card-info {
+  text-align: center;
+  width: 100%;
+}
+
+.ts-team-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0 0 15px 0;
+  line-height: 1.2;
+  color: var(--ts-accent);
+  transition: color 0.3s ease;
+}
+
+/* Inversion de texte au survol */
+.ts-card:hover .ts-team-name {
+  color: #ffffff;
+}
+
+.ts-cta {
+  display: block;
+  font-family: var(--font-tech);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  padding: 8px 0;
+  border-top: 1px solid var(--ts-border);
+  color: var(--ts-text-muted);
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.ts-card:hover .ts-cta {
+  color: #ffffff;
+  border-color: #ffffff;
+  font-weight: 700;
+}
+
+/* --- ÉTATS (Loading / Error) --- */
+.ts-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+}
+
+.ts-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top: 3px solid var(--ts-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 20px;
+}
+
+.ts-loading-text {
+  font-family: var(--font-tech);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes blink { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+.ts-message {
+  text-align: center;
+  border: 1px solid var(--ts-border);
+  padding: 30px;
+  font-family: var(--font-tech);
+  background: rgba(255,255,255,0.03);
+  max-width: 500px;
+  margin: 40px auto;
+}
+
+.ts-message.error {
+  border-color: #fff;
+  color: #fff;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .ts-title { font-size: 2rem; }
+  .ts-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .ts-card-inner { padding: 20px 10px; }
+  .ts-logo-box { width: 60px; height: 60px; }
+  .ts-team-name { font-size: 1rem; }
+}

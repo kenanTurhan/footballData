@@ -7,11 +7,10 @@ export class FootballController {
   @Get('league/:leagueId')
   async getTeams(@Param('leagueId') leagueId: string) {
     const response = await fetch(
-      `https://v3.football.api-sports.io/teams?league=${leagueId}&season=2021`,
+      `https://v3.football.api-sports.io/teams?league=${leagueId}&season=2023`,
       {
         headers: {
-          'x-rapidapi-key': process.env.FOOTBALL_API_KEY ?? '',
-          'x-rapidapi-host': 'v3.football.api-sports.io',
+          'x-apisports-key': process.env.FOOTBALL_API_KEY || '',
         },
       },
     );
@@ -29,8 +28,7 @@ export class FootballController {
       `https://v3.football.api-sports.io/teams?id=${id}`,
       {
         headers: {
-          'x-rapidapi-key': process.env.FOOTBALL_API_KEY ?? '',
-          'x-rapidapi-host': 'v3.football.api-sports.io',
+          'x-apisports-key': process.env.FOOTBALL_API_KEY || '',
         },
       }
     );
@@ -49,11 +47,10 @@ async getTeamStat(
   @Param('teamId') teamId: string,
 ) {
   const response = await fetch(
-    `https://v3.football.api-sports.io/teams/statistics?league=${leagueId}&team=${teamId}&season=2021`,
+    `https://v3.football.api-sports.io/teams/statistics?league=${leagueId}&team=${teamId}&season=2023`,
     {
       headers: {
-        'x-rapidapi-key': process.env.FOOTBALL_API_KEY ?? '',
-        'x-rapidapi-host': 'v3.football.api-sports.io',
+        'x-apisports-key': process.env.FOOTBALL_API_KEY || '',
       },
     },
   );

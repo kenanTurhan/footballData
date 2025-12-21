@@ -6,6 +6,7 @@ import TestPage from "./page/test"; // Ta page test
 import AccueilPage from "./page/accueil"; // Ta page accueil
 import "./index.css";
 import Navbar from"./coponent/navbar"; // Correction du chemin d'importation
+import Footer from "./coponent/footer";
 import Wheel from "./page/clubChoix"; // Importation de la page club
 import ClubPage from "./page/club"; // Importation de la page club avec détails
 import JoueurSearch from "./page/joueurRecherche"; // Importation de la page de recherche de joueurs
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/joueur/:id" element={<PlayerPage />} />
         <Route path="/radar" element={<RadarPage />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   </React.StrictMode>
 );

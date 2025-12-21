@@ -1,6 +1,6 @@
 // src/service/joueurProfileService.ts
 export async function getPlayerProfile(id: number) {
-  const res = await fetch(`http://localhost:3000/api/joueurs/profile/${id}`);
+  const res = await fetch(`/api/joueurs/profile/${id}`);
 
   if (!res.ok) throw new Error("Erreur API backend");
 

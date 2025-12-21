@@ -1,56 +1,591 @@
-.container {
-  display: flex;
-  flex-direction: column; /* empile les éléments verticalement */
-  align-items: center;    /* centre horizontalement */
-  gap: 10px;              /* petit espace entre le titre et les cartes */
-  height: 100vh;
-  background: #f5f5f5;
-  padding-top: 20px;      /* facultatif : petit espace en haut */
+/* --- CONFIGURATION & VARIABLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  --home-bg: #ffffff;
+  --home-card-bg: #ffffff;
+  --home-accent: #000000;
+  --home-text-muted: #666666;
+  --home-border: #333333;
+  --home-radius: 8px;
+  
+  --font-main: 'Inter', sans-serif;
+  --font-tech: 'JetBrains Mono', monospace;
 }
 
-.cartes {
+/* --- LAYOUT GLOBAL --- */
+.home-wrapper {
+  min-height: 100vh;
+  background-color: var(--home-bg);
+  color: var(--home-accent);
+  font-family: var(--font-main);
+  position: relative;
+  overflow-x: hidden;
+  padding: 80px 20px 60px;
   display: flex;
-  gap: 20px;              /* espace entre les cartes */
+  flex-direction: column;
+  align-items: center;
 }
 
-.carte {
-  width: 300px;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+/* Grille décorative en arrière-plan */
+.home-background-grid {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: linear-gradient(var(--home-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--home-border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* --- HEADER --- */
+.home-header {
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 80px;
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+}
+
+.home-subtitle {
+  font-family: var(--font-tech);
+  font-size: 0.8rem;
+  letter-spacing: 0.3rem;
+  color: var(--home-text-muted);
+  margin-bottom: 15px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.home-title {
+  font-size: 4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -3px;
+  line-height: 0.9;
+  margin: 0 0 25px 0;
+  background: linear-gradient(180deg, #000000 0%, #555 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.home-divider {
+  width: 80px;
+  height: 4px;
+  background: var(--home-accent);
+  margin: 0 auto 25px;
+}
+
+.home-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--home-text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+
+/* --- MAIN CONTENT & GRID --- */
+.home-content {
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Grid principal pour les cartes principales */
+.home-main-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(300px, 450px));
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.main-card {
+  min-height: 560px;
+  max-width: 450px;
+}
+
+/* Ruban de 4 cartes */
+.home-ribbon {
+  width: 100%;
+  margin-top: 40px;
+}
+
+.ribbon-title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.ribbon-title h2 {
+  color: var(--home-accent);
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.ribbon-divider {
+  width: 60px;
+  height: 3px;
+  background: var(--home-accent);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.home-ribbon-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* --- CARTE FEATURE --- */
+.home-card {
+  background-color: var(--home-card-bg);
+  border: 2px solid transparent;
+  border-radius: var(--home-radius);
   cursor: pointer;
-  transition: box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-.carte:hover {
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+.home-card:hover {
+  background-color: var(--home-accent);
+  border-color: var(--home-accent);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-h1 {
-  font-size: 2.5em;
-  margin: 0 0 20px 0; /* 20px sous le titre */
+.home-card-inner {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.home-card-category {
+  font-family: var(--font-tech);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  padding: 15px 20px 10px;
+  color: var(--home-text-muted);
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.home-card:hover .home-card-category {
+  color: #ffffff;
+}
+
+.home-image-box {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  margin: 0 20px 20px;
+  border-radius: calc(var(--home-radius) - 2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+}
+
+/* Styles spécifiques pour les cartes principales */
+.main-card .home-image-box {
+  height: 320px;
+}
+
+/* Styles spécifiques pour les cartes du ruban */
+.ribbon-card {
+  height: auto;
+  min-height: 280px;
+}
+
+.ribbon-card .home-image-box {
+  height: 120px;
+  margin: 0 15px 15px;
+}
+
+.ribbon-card .home-card-info {
+  padding: 0 15px 15px;
+}
+
+.ribbon-card .home-feature-title {
+  font-size: 1.1rem;
+  margin: 0 0 5px 0;
+}
+
+.ribbon-card .home-feature-subtitle {
+  font-size: 0.7rem;
+  margin: 0 0 10px 0;
+}
+
+.ribbon-card .home-feature-description {
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.ribbon-card .home-card-category {
+  padding: 10px 15px 8px;
+  font-size: 0.6rem;
+}
+
+.ribbon-card .home-cta {
+  padding: 15px;
+  font-size: 0.6rem;
+}
+
+.home-feature-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+  border-radius: 4px;
+}
+
+/* Pour les cartes principales, on veut que l'image remplisse bien l'espace */
+.main-card .home-feature-image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-position: center;
+}
+
+/* Pour les cartes du ruban, on garde le crop */
+.ribbon-card .home-feature-image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.home-card:hover .home-feature-image {
+  transform: scale(1.05);
+}
+
+.home-image-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.home-card:hover .home-image-overlay {
+  opacity: 1;
+}
+
+.home-card-info {
+  padding: 0 20px 20px;
+  flex: 1;
+}
+
+.home-feature-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+  color: var(--home-accent);
+  transition: color 0.3s ease;
+}
+
+.home-card:hover .home-feature-title {
+  color: #ffffff;
+}
+
+.home-feature-subtitle {
+  font-family: var(--font-tech);
+  font-size: 0.8rem;
+  color: var(--home-text-muted);
+  margin: 0 0 15px 0;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.home-card:hover .home-feature-subtitle {
+  color: rgba(255,255,255,0.8);
+}
+
+.home-feature-description {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--home-text-muted);
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.home-card:hover .home-feature-description {
+  color: rgba(255,255,255,0.9);
+}
+
+.home-cta {
+  font-family: var(--font-tech);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  padding: 20px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  color: var(--home-text-muted);
   text-align: center;
-  color: #333;
+  font-weight: 700;
+  transition: all 0.3s ease;
 }
-.graph-container {
-  margin-top: 30px;
+
+.home-card:hover .home-cta {
+  color: #ffffff;
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+}
+
+/* === STYLES POUR LA RECHERCHE DE JOUEURS === */
+
+.search-section {
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+.search-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.search-input-wrapper {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--home-radius);
+  padding: 8px;
+  transition: all 0.3s ease;
+}
+
+.search-input-wrapper:focus-within {
+  border-color: var(--home-accent);
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 15px 20px;
+  font-size: 1rem;
+  color: var(--home-text);
+  font-family: var(--font-primary);
+}
+
+.search-input::placeholder {
+  color: var(--home-text-muted);
+  opacity: 0.7;
+}
+
+.search-button {
+  background: var(--home-accent);
+  color: #ffffff;
+  border: none;
+  padding: 15px 30px;
+  border-radius: calc(var(--home-radius) - 4px);
+  font-family: var(--font-tech);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+}
+
+.search-button:hover {
+  background: #388e3c;
+  transform: translateY(-1px);
+}
+
+.search-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(46, 125, 50, 0.2);
+  border-top: 3px solid var(--home-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-family: var(--font-tech);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--home-text-muted);
+}
+
+.results-section {
+  width: 100%;
+}
+
+.results-header {
   text-align: center;
+  margin-bottom: 40px;
 }
 
-.containerTest {  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: auto;
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "test test2 test3 test4";
+.results-header h2 {
+  color: var(--home-accent);
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-.test { grid-area: test; }
+.results-count {
+  font-family: var(--font-tech);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--home-text-muted);
+  text-transform: uppercase;
+}
 
-.test2 { grid-area: test2; }
+.player-result-card {
+  transition: all 0.3s ease;
+}
 
-.test3 { grid-area: test3; }
+.player-result-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
 
-.test4 { grid-area: test4; }
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.empty-message {
+  text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--home-radius);
+}
+
+.empty-message h3 {
+  color: var(--home-text);
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+}
+
+.empty-message p {
+  color: var(--home-text-muted);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .home-wrapper {
+    padding: 60px 15px 40px;
+  }
+  
+  .home-title { 
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+  }
+  
+  .home-description {
+    font-size: 1rem;
+  }
+  
+  .home-header {
+    margin-bottom: 50px;
+  }
+  
+  .home-main-grid { 
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .main-card {
+    min-height: 480px;
+    max-width: none;
+  }
+  
+  .home-ribbon-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .ribbon-card {
+    min-height: 240px;
+  }
+  
+  .home-image-box {
+    height: 150px;
+  }
+  
+  .search-input-wrapper {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .search-button {
+    width: 100%;
+  }
+  
+  .results-header h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-title {
+    font-size: 2rem;
+  }
+  
+  .home-card-inner {
+    padding: 0;
+  }
+  
+  .home-feature-title {
+    font-size: 1.2rem;
+  }
+  
+  .home-ribbon-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .ribbon-title h2 {
+    font-size: 1.4rem;
+  }
+}

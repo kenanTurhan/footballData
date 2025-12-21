@@ -3,7 +3,7 @@
 export async function searchPlayers(query: string) {
   if (!query.trim()) return [];
 
-  const res = await fetch(`http://localhost:3000/api/joueurs/search/${query}`);
+  const res = await fetch(`/api/joueurs/search/${query}`);
   if (!res.ok) throw new Error("Failed to fetch players");
 
   const data = await res.json();

@@ -1,31 +1,47 @@
 // src/components/Navbar.tsx
 import { NavLink } from "react-router-dom";
 import "../css/navbar.css";
+
 import logo from "../image/logo.png";
-import langue from "../image/langue.png";
+import languageIcon from "../image/langue.png";
 
 export default function Navbar() {
   return (
     <nav className="navbar">
-      <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>
-        <div className="logo"><img src={logo} alt="" /></div>
+      {/* Logo */}
+      <NavLink to="/" className="navbar-logo">
+        <img src={logo} alt="FootData logo" />
       </NavLink>
 
-      <ul className="nav-links">
+      {/* Navigation droite */}
+      <ul className="navbar-links">
+        {/* Langue */}
         <li>
-      <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>
-        <div className="langue"><img src={langue} alt="" /></div>
-      </NavLink>
+          <button className="navbar-lang" aria-label="Changer la langue">
+            <img src={languageIcon} alt="Langue" />
+          </button>
         </li>
+
+        {/* GitHub */}
         <li>
-          <a href="https://github.com/kenanTurhan/" target="_blank" rel="noopener noreferrer" className="github-link">
+          <a
+            href="https://github.com/kenanTurhan/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             GitHub
           </a>
         </li>
+
+        {/* LinkedIn */}
         <li>
-          <NavLink to="/page2" className={({ isActive }) => isActive ? "active" : ""}>
-            X
-          </NavLink>
+          <a
+            href="https://linkedin.com/in/turhankenan"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>
         </li>
       </ul>
     </nav>

@@ -63,7 +63,7 @@ export default function ClubPage() {
       setLoading(true);
 
       try {
-        const teamResponse = await fetch(`http://localhost:3000/api/teams/${id}`);
+        const teamResponse = await fetch(`/api/teams/${id}`);
         if (!teamResponse.ok) throw new Error("Erreur API backend");
         const teamData = await teamResponse.json();
 
@@ -73,7 +73,7 @@ export default function ClubPage() {
 
           const leagueId = teamData.response[0].league?.id ?? 39;
 
-          const statsResponse = await fetch(`http://localhost:3000/api/teams/stat/${leagueId}/${id}`);
+          const statsResponse = await fetch(`/api/teams/stat/${leagueId}/${id}`);
           if (statsResponse.ok) {
             const statsData = await statsResponse.json();
             if (statsData.response) {

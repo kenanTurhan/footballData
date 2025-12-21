@@ -1,16 +1,326 @@
-.results {
-    height: 350px;            /* Hauteur fixe = environ 5 cartes visibles */
-    overflow-y: auto;         /* Scroll interne */
+/* Définition des variables */
+:root {
+    --color-primary: #007bff; /* Bleu (Joueur 1) */
+    --color-secondary: #dc3545; /* Rouge (Joueur 2) */
+    --color-background: #ffffff;
+    --color-card-bg: #ffffff;
+    --color-text-dark: #333;
+    --color-text-light: #555;
+    --color-border: #e0e0e0;
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.compare-radar-page {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 5px;
+
+    font-family: Arial, sans-serif;
+    background-color: var(--color-background);
+}
+
+.page-title {
+    color: var(--color-text-dark);
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 10px;
+}
+
+/* --- SECTION HAUTE : STATUT ET RECHERCHE --- */
+
+.selection-header {
+    margin-bottom: 30px;
+    background: var(--color-card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+}
+
+.search-group {
     display: flex;
-    flex-direction: column;   /* 1 carte par ligne */
-    gap: 15px;
-    border: 1px solid #ddd;   /* Pour bien voir la zone */
-    padding: 10px;
-    background: #f7f7f7;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid var(--color-border);
+    border-radius: 6px;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+.selection-indicator-global {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.selection-indicator-global.slot-1 {
+    background-color: rgba(0, 123, 255, 0.1); /* Lighter Blue */
+    color: var(--color-primary);
+    border: 1px dashed var(--color-primary);
+}
+
+.selection-indicator-global.slot-2 {
+    background-color: rgba(220, 53, 69, 0.1); /* Lighter Red */
+    color: var(--color-secondary);
+    border: 1px dashed var(--color-secondary);
 }
 
 
-/* Si tu veux 5 cartes visibles max par colonne */
+/* Statut des Joueurs Sélectionnés */
+.selected-players-status {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+}
+
+.player-slot {
+    flex: 1;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid var(--color-border);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.player-slot.selected {
+    border-color: var(--color-primary);
+    background-color: #f0f7ff; /* Light Blue */
+}
+
+.player-slot.slot-2.selected {
+    border-color: var(--color-secondary);
+    background-color: #fff0f0; /* Light Red */
+}
+
+.player-slot.empty {
+    opacity: 0.6;
+    font-style: italic;
+    min-height: 100px; /* Assure une taille minimale */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.slot-title {
+    margin-top: 0;
+    font-size: 1.1em;
+    color: var(--color-text-dark);
+}
+
+.player-name {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: var(--color-text-dark);
+    margin: 5px 0 10px 0;
+}
+
+.status-separator {
+    font-weight: 900;
+    font-size: 1.5em;
+    color: var(--color-text-light);
+}
+
+.remove-btn {
+    background-color: #ffffff; /* Gris */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.remove-btn:hover {
+    background-color: #ffffff;
+}
+
+/* --- SECTION DES RÉSULTATS DE RECHERCHE --- */
+
+.results-container {
+    min-height: 100px;
+    margin-bottom: 30px;
+}
+
+.loading-message, .error-message {
+    text-align: center;
+    padding: 15px;
+    color: var(--color-text-light);
+}
+
+.error-message {
+    color: var(--color-secondary);
+    font-weight: bold;
+}
+
+.player-cards-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
 .player-card {
-    width: 180px;
+    background-color: var(--color-card-bg);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, border 0.3s;
+    display: flex;
+    align-items: center;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.player-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-light);
+}
+
+/* --- SECTION DES RÉSULTATS DE RECHERCHE --- */
+
+.results-container {
+    /* Maintient la hauteur minimale si aucun résultat */
+    min-height: 100px;
+    margin-bottom: 30px;
+}
+
+.player-cards-list {
+    /* === 🚀 NOUVELLES RÈGLES POUR LE DÉFILEMENT === */
+    max-height: 450px; /* <--- Limite la hauteur du conteneur (ajustez cette valeur selon vos préférences) */
+    overflow-y: auto;  /* <--- Active le défilement vertical si le contenu dépasse max-height */
+    padding-right: 15px; /* Pour éviter que la barre de défilement ne touche les cartes */
+    /* ============================================== */
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* Optionnel : Améliorer le look des barres de défilement (Webkit) */
+.player-cards-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.player-cards-list::-webkit-scrollbar-thumb {
+    background-color: #c0c0c0;
+    border-radius: 4px;
+}
+
+.player-cards-list::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+/* Styles pour les cartes sélectionnées */
+.player-card.selected-1 {
+    border-color: var(--color-primary);
+    background-color: #f0f7ff;
+}
+
+.player-card.selected-2 {
+    border-color: var(--color-secondary);
+    background-color: #fff0f0;
+}
+
+.player-img-container {
+    flex-shrink: 0;
+    margin-right: 15px;
+    position: relative;
+}
+
+.player-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-border);
+}
+
+.selection-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 50%;
+    line-height: 1;
+}
+
+.badge-1 {
+    background-color: var(--color-primary);
+}
+.badge-2 {
+    background-color: var(--color-secondary);
+}
+
+.player-info {
+    flex-grow: 1;
+}
+
+.player-name-card {
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+    color: var(--color-text-dark);
+}
+
+.player-club, .player-position {
+    margin: 0;
+    font-size: 0.9em;
+    color: var(--color-text-light);
+}
+
+/* --- SECTION DU RADAR CHART --- */
+
+.radar-section {
+    padding: 20px;
+    background: var(--color-card-bg);
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+    margin-top: 30px;
+}
+
+.radar-title {
+    text-align: center;
+    color: var(--color-text-dark);
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.chart-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .selected-players-status {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .status-separator {
+        padding: 5px 0;
+    }
+    .player-slot {
+        width: 100%;
+    }
+    .player-cards-list {
+        grid-template-columns: 1fr;
+    }
 }

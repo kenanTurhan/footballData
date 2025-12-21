@@ -1,9 +1,10 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import fetch from 'node-fetch';
-
+import { JoueurEntity } from './joueur.entity';
+import { JoueurService } from './joueur.service';
 @Controller('api/joueurs')
 export class JoueurController {
-
+constructor(private readonly joueurService: JoueurService) {}
 //recuperer joueurs par leur nom pour barre de recherche
   @Get('search/:joueur')
   async getJoueurs(@Param('joueur') joueur: string) {
@@ -40,4 +41,22 @@ export class JoueurController {
     return await response.json();
 
   }
+  @Get(':id')
+  getById(@Param('id') id: string) {
+    return this.joueurService.findById(Number(id));
+  }
+  @Get('test/:id/')
+  async getJoueurEtCoéquipiers(@Param('id') id: number) {
+    const joueur = await this.joueurService.findById(id);
+
+  const match = await this.joueurService.findStatsById(id);
+
+  return {
+    joueur,
+    match,
+  };
+}
+
+
+
 }

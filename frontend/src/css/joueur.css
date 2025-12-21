@@ -1,67 +1,138 @@
-/* Général */
-.player-container {
-    padding: 30px 20px;
-    max-width: 1200px;
-    margin: 0 auto; /* Centrer le conteneur principal */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-    background-color: #f4f7f6;
+/* --- CONFIGURATION & VARIABLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  --home-bg: #ffffff;
+  --home-card-bg: #ffffff;
+  --home-accent: #000000;
+  --home-text: #000000;
+  --home-text-muted: #666666;
+  --home-border: #333333;
+  --home-radius: 8px;
+  
+  --font-main: 'Inter', sans-serif;
+  --font-tech: 'JetBrains Mono', monospace;
 }
 
-/* En-tête du Joueur (Profile Card) */
-.player-profile-header {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* Dégradé bleu foncé */
-    color: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    margin-bottom: 40px;
+/* === STYLES SPÉCIFIQUES POUR LA PAGE JOUEUR === */
+
+.player-header {
+  margin-bottom: 60px;
 }
 
-.player-profile-header h1 {
-    font-size: 2.5em;
-    margin: 0;
-    font-weight: 700;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+/* Section Profil Principal */
+.player-profile-section {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 40px;
+  margin-bottom: 60px;
+  align-items: start;
 }
 
-.player-photo {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%; /* Image ronde */
-    object-fit: cover;
-    border: 5px solid #fff;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+.player-image-card {
+  background: var(--home-card-bg);
+  border-radius: var(--home-radius);
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
 }
 
-/* Section d'Informations */
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+.player-image-card:hover {
+  border-color: var(--home-accent);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
-.info-item {
-    background-color: #ffffff;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    border-left: 5px solid #8884d8; /* Bande de couleur pour le style */
-    transition: transform 0.2s;
+.player-main-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--home-accent);
+  transition: transform 0.3s ease;
 }
 
-.info-item:hover {
-    transform: translateY(-3px); /* Effet au survol */
+.player-image-card:hover .player-main-photo {
+  transform: scale(1.05);
 }
 
-.info-item strong {
-    display: block;
-    font-size: 0.9em;
-    color: #666;
-    margin-bottom: 5px;
+.player-info-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.player-info-card {
+  flex: 1;
+  min-height: 180px;
+}
+
+.player-basic-info {
+  padding: 20px 0;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-family: var(--font-tech);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--home-text-muted);
+  text-transform: uppercase;
+}
+
+.info-value {
+  font-weight: 600;
+  color: var(--home-accent);
+  font-size: 0.9rem;
+}
+
+/* Section Statistiques */
+.stats-ribbon {
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+.stats-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.stat-card {
+  text-align: center;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--home-accent);
+  margin: 10px 0;
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: var(--font-tech);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--home-text-muted);
+  text-transform: uppercase;
 }
 
 .info-item span {
@@ -85,7 +156,7 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    border-top: 5px solid #82ca9d; /* Couleur distinctive pour les stats */
+    border-top: 5px solid #373938; /* Couleur distinctive pour les stats */
 }
 
 .stat-card h3 {
@@ -101,45 +172,116 @@
     margin: 5px 0 0 0;
 }
 
-/* Radar Chart et Bouton */
+/* Section Radar */
 .radar-section {
-    background-color: #ffffff;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.radar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.radar-chart-card {
+  background: var(--home-card-bg);
+  border-radius: var(--home-radius);
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  max-width: 600px;
+  width: 100%;
+}
+
+.radar-chart-card:hover {
+  border-color: var(--home-accent);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.radar-actions {
+  text-align: center;
+}
+
+.radar-button {
+  display: inline-block;
+  background: var(--home-accent);
+  color: #ffffff;
+  padding: 15px 30px;
+  border: none;
+  border-radius: var(--home-radius);
+  font-family: var(--font-tech);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.radar-button:hover {
+  background: #333333;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .player-profile-section {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .player-image-card {
     padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    margin-top: 40px;
-    text-align: center;
+  }
+  
+  .player-main-photo {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .stat-card {
+    min-height: 120px;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+  
+  .radar-chart-card {
+    padding: 20px;
+  }
 }
 
-.radar-section h2 {
-    color: #1e3c72;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.chart-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-/* Bouton */
-.compare-button {
-    background-color: #ff6f61; /* Couleur d'action accrocheuse */
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
-    font-weight: 600;
-}
-
-.compare-button:hover {
-    background-color: #e65a4c;
-    transform: translateY(-2px);
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .player-info-cards {
+    gap: 15px;
+  }
+  
+  .player-info-card {
+    min-height: 150px;
+  }
+  
+  .stat-number {
+    font-size: 1.8rem;
+  }
+  
+  .radar-chart-card {
+    padding: 15px;
+  }
 }
 
 /* Mise en page des infos dans le header pour la lisibilité */
