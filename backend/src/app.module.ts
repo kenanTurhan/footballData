@@ -7,6 +7,7 @@ import { JoueurModule } from './joueurs/joueur.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JoueurEntity } from './joueurs/joueur.entity';
 import { MatchStatsEntity } from './joueurs/stats.entity';
+import { JoueurApiEntity } from './joueurs/joueurApi.entity';
 
 @Module({
   imports: [
@@ -18,8 +19,8 @@ import { MatchStatsEntity } from './joueurs/stats.entity';
       username: process.env.DATABASE_USER || 'myuser',
       password: process.env.DATABASE_PASSWORD || 'mypass',
       database: process.env.DATABASE_NAME || 'mydb',
-      entities: [JoueurEntity, MatchStatsEntity],
-      synchronize: false, // Désactivé pour éviter les conflits avec les données existantes
+      entities: [JoueurEntity, MatchStatsEntity, JoueurApiEntity],
+      synchronize: true, // Activé pour créer automatiquement les nouvelles tables
     }),
     FootballModule,
     JoueurModule,

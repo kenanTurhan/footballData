@@ -45,10 +45,17 @@ export default function CompareRadarPage() {
     };
 
     const getStats = (player: any) => {
-        if (!player || !player.statistics || player.statistics.length === 0) {
+        if (!player) {
             return null;
         }
-        return player.statistics[0];
+        
+        // Le backend retourne soit existingPlayer soit existingPlayer2
+        const playerData = player.existingPlayer || player.existingPlayer2;
+        if (!playerData) {
+            return null;
+        }
+        
+        return playerData;
     };
 
     const stats1 = getStats(player1);
@@ -66,21 +73,21 @@ export default function CompareRadarPage() {
 
     // Extraction des valeurs A (Joueur 1) et B (Joueur 2)
     const values1 = stats1 ? [
-        stats1.shots.total || 0,
-        stats1.goals.total || 0,
-        stats1.goals.assists || 0,
-        stats1.passes.key || 0,
-        stats1.dribbles.success || 0,
-        stats1.duels.won || 0,
+        stats1.shoot || 0,           // Tirs
+        stats1.goals || 0,           // Buts
+        stats1.assists || 0,         // Passes décisives
+        stats1.keyPasses || 0,       // Passes clés
+        stats1.dribblesSuccess || 0, // Dribbles réussis
+        stats1.duelsWon || 0,        // Duels gagnés
     ] : [0, 0, 0, 0, 0, 0];
 
     const values2 = stats2 ? [
-        stats2.shots.total || 0,
-        stats2.goals.total || 0,
-        stats2.goals.assists || 0,
-        stats2.passes.key || 0,
-        stats2.dribbles.success || 0,
-        stats2.duels.won || 0,
+        stats2.shoot || 0,           // Tirs
+        stats2.goals || 0,           // Buts
+        stats2.assists || 0,         // Passes décisives
+        stats2.keyPasses || 0,       // Passes clés
+        stats2.dribblesSuccess || 0, // Dribbles réussis
+        stats2.duelsWon || 0,        // Duels gagnés
     ] : [0, 0, 0, 0, 0, 0];
     
     // Création du tableau de données final pour Recharts
@@ -102,8 +109,8 @@ export default function CompareRadarPage() {
     return { 
         radarData: finalData, 
         domainMax: maxDomain, 
-        playerName1: player1?.player.name || "Joueur 1 (Non sélectionné)",
-        playerName2: player2?.player.name || "Joueur 2 (Non sélectionné)",
+        playerName1: stats1?.name || "Joueur 1 (Non sélectionné)",
+        playerName2: stats2?.name || "Joueur 2 (Non sélectionné)",
     };
   }, [player1, player2]); 
 
@@ -124,7 +131,7 @@ export default function CompareRadarPage() {
     setQuery(""); // Réinitialiser la recherche
   };
 
-   const handlePlayerRemove = (slot: 1 | 2) => {
+  const handlePlayerRemove = (slot: 1 | 2) => {
     if (slot === 1) {
       setSelectedPlayerId1(null);
       setSelectingPlayerSlot(1); // On redirige la prochaine sélection vers le slot 1
@@ -133,6 +140,9 @@ export default function CompareRadarPage() {
       setSelectingPlayerSlot(2); // On redirige la prochaine sélection vers le slot 2
     }
   };
+
+  // Log selection state outside of JSX to avoid returning void in a ReactNode
+  console.log(selectedPlayerId1, selectedPlayerId2);
 
   return (
     <div className="compare-radar-page">
@@ -235,11 +245,10 @@ export default function CompareRadarPage() {
       {/* SECTION DU RADAR CHART DE COMPARAISON */}
       <div className="radar-section">
         <h2 className="radar-title">
-            {selectedPlayerId1 || selectedPlayerId2 
-              ? `Comparaison : ${playerName1} vs ${playerName2}` 
-              : "Veuillez sélectionner deux joueurs pour comparer leurs statistiques"}
         </h2>
-        
+
+        {(profileLoading1 || profileLoading2) && (selectedPlayerId1 || selectedPlayerId2) && <p className="loading-message">Chargement des statistiques...</p>}
+
         {(profileLoading1 || profileLoading2) && (selectedPlayerId1 || selectedPlayerId2) && <p className="loading-message">Chargement des statistiques...</p>}
         
         {!(selectedPlayerId1 === null && selectedPlayerId2 === null) && radarData.length > 0 && !(profileLoading1 || profileLoading2) && (

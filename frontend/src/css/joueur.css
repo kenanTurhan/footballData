@@ -100,6 +100,13 @@
   font-size: 0.9rem;
 }
 
+.info-value:hover {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+
 /* Section Statistiques */
 .stats-ribbon {
   width: 100%;
@@ -172,62 +179,6 @@
     margin: 5px 0 0 0;
 }
 
-/* Section Radar */
-.radar-section {
-  width: 100%;
-  margin-top: 40px;
-}
-
-.radar-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-}
-
-.radar-chart-card {
-  background: var(--home-card-bg);
-  border-radius: var(--home-radius);
-  padding: 40px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-  max-width: 600px;
-  width: 100%;
-}
-
-.radar-chart-card:hover {
-  border-color: var(--home-accent);
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
-
-.radar-actions {
-  text-align: center;
-}
-
-.radar-button {
-  display: inline-block;
-  background: var(--home-accent);
-  color: #ffffff;
-  padding: 15px 30px;
-  border: none;
-  border-radius: var(--home-radius);
-  font-family: var(--font-tech);
-  font-weight: 600;
-  font-size: 0.8rem;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.radar-button:hover {
-  background: #333333;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .player-profile-section {
@@ -255,6 +206,11 @@
   
   .stat-number {
     font-size: 2rem;
+  }
+  
+  .containerStat {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
   
   .radar-chart-card {
@@ -292,3 +248,97 @@
     font-size: 1.1em;
     margin: 5px 0;
 }
+
+/* Section Analyse des Performances */
+.performance-analysis {
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+.containerStat {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.radar, .Courbe {
+  width: 100%;
+}
+
+.chart-title {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--home-accent);
+}
+
+.chart-title h3 {
+  font-family: var(--font-tech);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--home-accent);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Section Radar */
+.radar-section {
+  width: 100%;
+}
+
+.radar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.radar-chart-card {
+  /*background: var(--home-card-bg);*/
+  border-radius: var(--home-radius);
+  padding: 30px;
+  /* box-shadow: 0 4px 20px rgba(0,0,0,0.08); */
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.radar-chart-card:hover {
+  border-color: var(--home-accent);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.radar-actions {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.radar-button {
+  display: inline-block;
+  background: var(--home-accent);
+  color: #ffffff;
+  padding: 15px 30px;
+  border: none;
+  border-radius: var(--home-radius);
+  font-family: var(--font-tech);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.radar-button:hover {
+  background: #333333;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.home-card:hover .info-label .info-value {
+  color: #ffffff;
+}
+

@@ -1,14 +1,20 @@
 // src/pages/SearchPlayerPage.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearchPlayer } from "../hooks/useJoueurSearch";
+import { useMeilleur } from "../hooks/useMeilleur";
 import "../css/accueil.css"; // Pour les styles de base (wrapper, header, cartes)
 import "../css/chercheJoueur.css"; // Pour les styles spécifiques de recherche
 
 export default function SearchPlayerPage() {
   const [query, setQuery] = useState("");
   const { players, loading, search } = useSearchPlayer();
+  const { players: bestPlayers, loading: loadingBest, error, fetchMeilleurs } = useMeilleur();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchMeilleurs();
+  }, []);
 
   const onSearch = () => search(query);
 
@@ -51,13 +57,76 @@ export default function SearchPlayerPage() {
           </div>
         </div>
 
-        {/* État de chargement */}
-        {loading && (
-          <div className="loading-section">
-            <div className="loader-container">
-              <div className="spinner"></div>
-              <span className="loading-text">RECHERCHE EN COURS...</span>
+        {/* Top 10 meilleurs joueurs */}
+        {loadingBest && (
+          <div className="best-player">
+            <h2>Chargement des meilleurs joueurs...</h2>
+          </div>
+        )}
+
+        {!loadingBest && bestPlayers.length > 0 && players.length === 0 && (
+          <div className="results-section">
+            <div className="results-header">
+              <h2>Vous pouvez consulter...</h2>
+              <div className="results-count">{bestPlayers.length} joueur(s)</div>
             </div>
+            <div className="home-ribbon-grid">
+              {bestPlayers.map((p: any, i) => (
+                <div
+                  key={i}
+                  className="home-card ribbon-card player-result-card"
+                  onClick={() => navigate(`/joueur/${p.player.id}`)}
+                >
+                  <div className="home-card-inner">
+                    <div className="home-card-category"> {i + 1}</div>
+                    
+                    <div className="home-image-box ribbon-image">
+                      <img
+                        src={p.player.photo || '/placeholder-player.png'}
+                        alt={p.player.name}
+                        className="home-feature-image"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/placeholder-player.png';
+                        }}
+                      />
+                      <div className="home-image-overlay"></div>
+                    </div>
+                    
+                    <div className="home-card-info">
+                      <h4 className="home-feature-title">{p.player.name || "Nom non disponible"}</h4>
+                      <p className="home-feature-subtitle">
+                        {p.player.position || "Position inconnue"} • {p.player.age || "N/A"} ans
+                      </p>
+                      <p className="home-feature-description">
+                        {p.player.nationality || "Nationalité inconnue"}
+                        {p.player.team && ` • ${p.player.team}`}
+                      </p>
+                    </div>
+                    
+                    <div className="home-cta">
+                      VOIR PROFIL →
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+
+        {!loading && players.length == 0 && !loadingBest && bestPlayers.length === 0 && (
+          <div className="empty-state">
+            <div className="empty-message">
+              <h3>Commencez votre recherche</h3>
+              <p>Entrez le nom d'un joueur pour voir ses informations</p>
+            </div>
+          </div>
+        )}
+
+        {/* État de chargement recherche */}
+        {loading && (
+          <div className="best-player">
+            <h2>Recherche en cours...</h2>
           </div>
         )}
 
@@ -111,7 +180,6 @@ export default function SearchPlayerPage() {
           </div>
         )}
 
-        {/* État vide */}
         {!loading && players.length === 0 && query && (
           <div className="empty-state">
             <div className="empty-message">

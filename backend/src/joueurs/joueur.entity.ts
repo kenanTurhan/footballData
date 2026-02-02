@@ -9,5 +9,8 @@ export class JoueurEntity {
   @Column({ type: 'varchar', length: 50 })
   nom_prenom: string;
 
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  idApi: number;
+
   // ... autres champs
 }

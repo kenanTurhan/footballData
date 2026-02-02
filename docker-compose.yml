@@ -44,7 +44,7 @@ services:
     networks:
       - mynet
     ports:
-    - "5432:5432"   # <-- ajoute ceci
+    - "5432:5432"   # Port standard PostgreSQL
 
 
 volumes:

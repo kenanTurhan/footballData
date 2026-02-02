@@ -9,7 +9,7 @@ export class MatchStatsEntity {
   @Column({ type: 'date' })
   match_date: Date;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   opponent: string;
 
   @Column({ type: 'int' })
@@ -27,6 +27,8 @@ export class MatchStatsEntity {
   @Column({ type: 'int' })
   player_id: number;
 
+  @Column({ type: 'int' })
+  idApi: number;
 
   // ... autres champs
 }
