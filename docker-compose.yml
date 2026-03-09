@@ -9,7 +9,7 @@ services:
     environment:
       - NODE_ENV=production
     ports:
-      - "3000:3000"   # adapte si ton backend écoute autre port
+      - "3000"   # adapte si ton backend écoute autre port
     depends_on:
       - db  # si tu as une DB, sinon retire
     networks:
