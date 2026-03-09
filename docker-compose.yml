@@ -24,7 +24,7 @@ services:
     container_name: myapp-frontend
     restart: unless-stopped
     ports:
-      - "3001:80"
+      - "80"
     environment:
       VITE_API_URL: http://backend:3000  
 
