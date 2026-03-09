@@ -8,7 +8,6 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-      # - DATABASE_URL=...  # mets ici tes variables d'environnement réelles ou via .env
     ports:
       - "3000:3000"   # adapte si ton backend écoute autre port
     depends_on:
@@ -27,12 +26,11 @@ services:
     ports:
       - "80:80"
     environment:
-      VITE_API_URL: http://backend:3000  # <- ajoute ça
+      VITE_API_URL: http://backend:3000  
 
     networks:
       - mynet
 
-  # Exemple de service DB (optionnel)
   db:
     image: postgres:15-alpine
     environment:
@@ -44,7 +42,7 @@ services:
     networks:
       - mynet
     ports:
-    - "5432:5432"   # Port standard PostgreSQL
+    - "5433:5432"   
 
 
 volumes:
