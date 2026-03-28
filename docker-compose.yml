@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   backend:
     build:
@@ -9,9 +8,9 @@ services:
     environment:
       - NODE_ENV=production
     ports:
-      - "3000"   # adapte si ton backend écoute autre port
+      - "3000"   
     depends_on:
-      - db  # si tu as une DB, sinon retire
+      - db  
     networks:
       - mynet
     env_file:
@@ -41,8 +40,6 @@ services:
       - db-data:/var/lib/postgresql/data
     networks:
       - mynet
-    ports:
-    - "5433:5432"   
 
 
 volumes:
