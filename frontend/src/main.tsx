@@ -12,10 +12,12 @@ import ClubPage from "./page/club"; // Importation de la page club avec détails
 import JoueurSearch from "./page/joueurRecherche"; // Importation de la page de recherche de joueurs
 import PlayerPage from "./page/playerPage"; // Importation de la page joueur avec détails
 import RadarPage from "./page/radarPage"; // Importation de la page radar
+import SeoHead from "./coponent/seoHead";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
+      <SeoHead />
       <Navbar />
       <Routes>
         <Route path="/" element={<AccueilPage />} />
