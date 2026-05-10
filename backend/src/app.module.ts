@@ -20,7 +20,7 @@ import { JoueurApiEntity } from './joueurs/joueurApi.entity';
       password: process.env.DATABASE_PASSWORD || 'mypass',
       database: process.env.DATABASE_NAME || 'mydb',
       entities: [JoueurEntity, MatchStatsEntity, JoueurApiEntity],
-      synchronize: true, // Activé pour créer automatiquement les nouvelles tables
+      synchronize: true,
     }),
     FootballModule,
     JoueurModule,
