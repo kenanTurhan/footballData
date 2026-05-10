@@ -206,7 +206,7 @@ export default function ClubPage() {
           <div className="club-venue-section">
             <div className="home-card club-venue-card">
               <div className="home-card-inner">
-                <div className="home-card-category">ENCEINTE</div>
+                <div className="home-card-category">STADE</div>
                 <div className="club-venue-body">
                   <img src={venue.image} alt={venue.name} className="club-venue-image" />
                   <div className="club-venue-info">
